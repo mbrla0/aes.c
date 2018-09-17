@@ -154,6 +154,8 @@ aes_new(
 	unsigned const char *rsbox,
 	void *key)
 {
+	union aes_keyexpand ex;
+
 	/* Use default S-Boxes if none were provided */
 	if(fsbox == NULL || rsbox == NULL){
 		t->fsbox = DEF_FSBOX;
@@ -164,7 +166,6 @@ aes_new(
 	}
 	
 	/* Expand key */
-	union aes_keyexpand ex;
 	ex.bytes = malloc(sizeof(aes_word) * block_size * (rounds + 1));
 	keyexpand(ex, keylen, rounds, block_size, key, t->fsbox);
 
@@ -263,9 +264,10 @@ ffpm(unsigned char a, unsigned char b)
 {
 	/* Accumulator for the product */
 	unsigned char p;
-	p = 0;
-
 	unsigned char i;
+	unsigned char carry;
+	
+	p = i = 0;
 	for(i = 0; i < 8; ++i){
 		/* Check if there are pendencies */
 		if(!a || !b) break;
@@ -274,7 +276,6 @@ ffpm(unsigned char a, unsigned char b)
 		if(b & 1) p ^= a;
 		b >>= 1;
 		
-		unsigned char carry;
 		carry = a & 0x80;
 		
 		a <<= 1;
@@ -288,10 +289,12 @@ ffpm(unsigned char a, unsigned char b)
 void
 aes_perform(struct aes *state, aes_word *input)
 {
+	unsigned int i, j;
+
 	/* XOR the initial round key */
 	xorblk(state->block_size, input, state->keyexpand.words);
 	
-	unsigned int i, j;
+	/* Perform rounds */
 	for(i = 1; i < state->rounds; ++i){
 		sbtblk(state->block_size, input, state->fsbox);
 		lrtblk(state->block_size, sizeof(aes_word), input);

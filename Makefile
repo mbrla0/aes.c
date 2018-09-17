@@ -1,8 +1,12 @@
-AR=ar
-CC=gcc
-CFLAGS=-O0 -g -fpic -pedantic -Wall
+# Unix AR, only needed for the libaes.a target
+AR=ar 
 
-all: libaes.so libaes.a
+# c90-compliant C compiler
+CC=gcc
+
+# Build flags 
+CFLAGS=-O0 -g -fpic -std=c90 -pedantic
+
 
 libaes.a: aes.o
 	$(AR) rcs $@ $<
