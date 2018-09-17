@@ -21,7 +21,9 @@ discrete constant-sized blocks of data, this is the single
 value that will actually determine how the algorythm will run.
 For AES, specifically, this value will determine which
 variation of the algortythm, such as AES-128 or AES-256, will
-be executed (See the "AES KBR table" section for which values
+be executed (See the 
+["AES KBR table"](https://github.com/DarkRyu550/aes.c#aes-kbr-table)
+section for which values
 correspond to which variations).
 * S-Boxes: 16x16 1-byte valued matrices used in determined
 steps of the cipher algorythm for replacing byte values one to
@@ -37,7 +39,8 @@ Specifics:
 be able to handle any KBR triplet. However, even though it
 will comply in running any given variation of the algorythm,
 only very specific triplets, namely, the ones listed under
-"AES KBR table" have any guarantee of proper functionality.
+["AES KBR table"](https://github.com/DarkRyu550/aes.c#aes-kbr-table)
+have any guarantee of proper functionality.
 Note that "guarantee" here is used loosely, as I provide no
 real guarantee aside from the fact they have worked in my
 personal unit tests, so your mileage may vary.
